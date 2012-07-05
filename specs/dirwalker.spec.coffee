@@ -34,36 +34,4 @@ they = (mssg, data, arg...) ->
 #######################################
 # Test
 
-describe "Dirwalker", "Modifier", ->
-    describe 'NOERR', ->
-        beforeEach ->
-            f = dw.NOERR (x, err) -> return x, err
-            val = 23
-            err = 42
-            thrown = null
-            spyOn(util.error).andCall (x) -> thrown = x
-
-        it 'noerr', ->
-            r = f null, val
-            expect(r).toEqual val
-            expect(util.error).not.toHaveBeenCalled()
-
-        it 'noerr', ->
-            r = f err , val
-            expect(r).toEqual val
-            expect(util.error).toHaveBeenCalled().
-            expect(thrown).toEqual err
-
-    it 'Y', ->
-        f = (x)->x
-        expect(do dw.Y f).toEqual f
-
-    they 'CONST', [null, 0, 1, true, false, "fnord"], (c) ->
-        expect(do dw.CONST c).toEqual c
-
-    describe "ARG", ->
-        beforeEach ->
-            f = (a...) -> a
-            argo = [2,4,6,8, "foo"]
-            argmod = [4, 6, 9 12, "bar"]
-            
+describe "Dirwalker", ->
