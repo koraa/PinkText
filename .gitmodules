@@ -1,0 +1,6 @@
+[submodule "node_modules/F-unction"]
+	path = node_modules/F-unction
+	url = git://github.com/koraa/F-unction.git
+[submodule "node_modules/SimpleKV"]
+	path = node_modules/SimpleKV
+	url = git://github.com/koraa/SimpleKV.git
