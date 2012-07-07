@@ -57,11 +57,13 @@ isFile = (f1, f2) -> (fs.reapathSync f1) == (fs.reapathSync f2)
 ###############################
 # Fun
 
-walk_dir = (dir, preq, f) ->
+walk_dir = (dir, preq, f, rel='') ->
     fs.readdir F.NOERR (files) ->
         for o in files
             p = (path.join dir, o)
-            f p if preq  o
+            r = (path.join rel, o)
+        
+            f p, r if preq  o
             if isDir o
                 walk_dir p, preq, f
 
