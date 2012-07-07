@@ -49,6 +49,11 @@ isFile = (o) ->
 # 
 nameMatch = (n, p) -> (path.basename n).match p
 
+#
+# Check if the path matches
+# 
+isFile = (f1, f2) -> (fs.reapathSync f1) == (fs.reapathSync f2)
+
 ###############################
 # Fun
 
