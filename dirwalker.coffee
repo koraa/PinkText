@@ -35,22 +35,19 @@ F    = require 'F'
 #
 # Check if the file is a dir
 # 
-isDir = F.NOERR (o, Yf=Fnull, Nf=Fnull) ->
-    fs.stat F.NOERR (stat) ->
-        if stat.isDirectory()
-            do Yf
-        else
-            do Nf
+isDir = (o) ->
+    fs.statSync(o).stat.isDirectory()
 
 #
 # Check if the file is a document
 # 
-isFile = F.FUT_NOT isDir
+isFile = (o) ->
+    fs.statSync(o).stat.isFile()
 
 #
 # Check if the name matches the expression
 # 
-nameMatch = F.GEN_FUT (n, p) -> n.match p
+nameMatch = (n, p) -> n.match p
 
 ###############################
 # Fun
@@ -58,8 +55,9 @@ nameMatch = F.GEN_FUT (n, p) -> n.match p
 walk_dir = (dir, preq, f) ->
     fs.readdir F.NOERR (files) ->
         for o in files
-            preq  o, f
-            isDir o, F.SETARG walk_dir, (path.join dir, o), preq, f
+            f if preq  o
+            if isDir o
+                walk_dir (path.join dir, o), preq, f
 
 ###############################
 # Export
@@ -67,5 +65,7 @@ walk_dir = (dir, preq, f) ->
 exports.isDir = isDir
 exports.isFile = isFile
 exports.nameMatch = nameMatch
+exports.match     = nameMatch
 
 exports.walk_dir = walk_dir
+exports.walk     = walk_dir
