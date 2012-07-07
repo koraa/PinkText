@@ -23,5 +23,11 @@
 # along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-gen_index = (dir, index = path.join dir, "index") ->
+db   = require './db'
+wlk  = require './dirwalker'
+path = require 'path'
+F    = require 'F'
+
+gen_index = (dir, index = path.join dir, "_index", name) ->
+    wkl.walk dir, (F.ALL wlk.isFile, F.NOT F.ARG wlk.match, index)
     

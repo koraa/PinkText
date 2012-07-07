@@ -41,6 +41,6 @@ PinkDB
     flushIndex: ->
         fs.writeFile @f_ind, (util.format '%j', @b_ind)
 
-    clear: (f) ->
+    delete: (f) ->
         fs.rmdir @loc, f
         @b_ind = {}
