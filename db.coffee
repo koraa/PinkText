@@ -3,7 +3,7 @@
 # Author: Karolin Varner
 # Date:   7/7/2012
 #
-# This file provides an API for accessing and modifying the 
+# This file provides an API for accessing and modifying the PinkText File.
 # 
 ##########################################################
 #
