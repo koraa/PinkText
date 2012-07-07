@@ -31,7 +31,7 @@ _    = require 'underscore'
 sys  = require 'child_process'
 skv  = require 'simplekv'
 
-gen_index = (dir, index = path.join dir, "_index", name) ->
+gen_index = (dir, index = path.join dir, "_index") ->
     db = new db.PinkDB index
 
     db.delete()
@@ -50,5 +50,3 @@ gen_index = (dir, index = path.join dir, "_index", name) ->
                 time:    okv["commit-time"  ][i]
                 summary: okv["commit-time"  ][i]
             db.set r, "edits": edits
-        
-    
