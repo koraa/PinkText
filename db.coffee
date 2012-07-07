@@ -35,8 +35,8 @@ PinkDB
         @b_ind = {}
 
     set: (k,v,f) ->
-        @b_ind[k] = v[date]
-        fs.writeFile (path.join @f_entries, k), (util.format '%j', v)
+        @b_ind[k] = v["edits"][0]["date"]
+        fs.writeFile (path.join @f_entries, k), (util.format '%j', v), f
 
     flushIndex: (f) ->
         f @f_ind, (util.format '%j', @b_ind)
