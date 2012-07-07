@@ -47,7 +47,7 @@ isFile = (o) ->
 #
 # Check if the name matches the expression
 # 
-nameMatch = (n, p) -> n.match p
+nameMatch = (n, p) -> (path.basename n).match p
 
 ###############################
 # Fun
@@ -55,9 +55,10 @@ nameMatch = (n, p) -> n.match p
 walk_dir = (dir, preq, f) ->
     fs.readdir F.NOERR (files) ->
         for o in files
-            f if preq  o
+            p = (path.join dir, o)
+            f p if preq  o
             if isDir o
-                walk_dir (path.join dir, o), preq, f
+                walk_dir p, preq, f
 
 ###############################
 # Export
