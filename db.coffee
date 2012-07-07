@@ -32,14 +32,19 @@ PinkDB
     constructor: (@f_loc) ->
         @f_ind     = path.join @f_loc, "index.json"
         @f_entries = path.join @f_loc, "entries/"
-        @b_ind = {}
+        @b_ind = {} # Using a map here to enshure that each k occures once only
 
     set: (k,v,f) ->
         @b_ind[k] = v["edits"][0]["date"]
         fs.writeFile (path.join @f_entries, k), (util.format '%j', v), f
 
-    flushIndex: (f) ->
-        f @f_ind, (util.format '%j', @b_ind)
+    flushIndex: ->
+        si = F.dor @b_ind,
+            F.PIPE ((d) -> [k,v] for k,v in d         ),
+                   ((l) -> l.sort, (a,b) -> a[1]-b[1] ),
+                   ((m) -> e[0] for e in m            )
+        
+        fs.writeFile @f_ind, (util.format '%j', si)
 
     init: ->
         fs.mkdir @f_loc
