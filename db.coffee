@@ -38,8 +38,12 @@ PinkDB
         @b_ind[k] = v[date]
         fs.writeFile (path.join @f_entries, k), (util.format '%j', v)
 
-    flushIndex: ->
-        fs.writeFile @f_ind, (util.format '%j', @b_ind)
+    flushIndex: (f) ->
+        f @f_ind, (util.format '%j', @b_ind)
+
+    init: ->
+        fs.mkdir @f_loc
+        fs.mkdir @f_entries
 
     delete: (f) ->
         fs.rmdir @loc, f
