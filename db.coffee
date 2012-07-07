@@ -36,7 +36,7 @@ PinkDB
 
     set: (k,v,f) ->
         @b_ind[k] = v["edits"][0]["date"]
-        fs.writeFile (path.join @f_entries, k), (util.format '%j', v), f
+        fs.writeFileSync (path.join @f_entries, k), (util.format '%j', v), f
 
     flushIndex: ->
         si = F.dor @b_ind,
@@ -44,12 +44,12 @@ PinkDB
                    ((l) -> l.sort, (a,b) -> a[1]-b[1] ),
                    ((m) -> e[0] for e in m            )
         
-        fs.writeFile @f_ind, (util.format '%j', si)
+        fs.writeFileSync @f_ind, (util.format '%j', si)
 
     init: ->
-        fs.mkdir @f_loc
-        fs.mkdir @f_entries
+        fs.mkdirSync @f_loc
+        fs.mkdirSync @f_entries
 
     delete: (f) ->
-        fs.rmdir @loc, f
+        fs.rmdirSync @loc, f
         @b_ind = {}
