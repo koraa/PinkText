@@ -27,7 +27,28 @@ db   = require './db'
 wlk  = require './dirwalker'
 path = require 'path'
 F    = require 'F'
+_    = require 'underscore'
+sys  = require 'child_process'
+skv  = require 'simplekv'
 
 gen_index = (dir, index = path.join dir, "_index", name) ->
-    wkl.walk dir, (F.ALL wlk.isFile, F.NOT F.ARG wlk.match, index)
+    db = new db.PinkDB index
+
+    db.delete()
+    db.init()
+
+    wkl.walk dir, (F.ALL wlk.isFile, (F.NOT F.ARG wlk.isFile, index)), (f, r) ->
+        proc = sys.exec_file './git-info.sh'
+
+        sbuf = []
+        proc.stdOut.on 'data', s -> sbuf.push s
+
+        proc.stdOut.on 'eof', ->
+            okv = skv.parse sbuf.join ''
+            edits = for i in [..okv["commit-author"].length]
+                author:  okv["commit-author"][i]
+                time:    okv["commit-time"  ][i]
+                summary: okv["commit-time"  ][i]
+            db.set r, "edits": edits
+        
     
