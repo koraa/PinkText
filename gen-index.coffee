@@ -50,3 +50,5 @@ gen_index = (dir, index = path.join dir, "_index") ->
                 time:    okv["commit-time"  ][i]
                 summary: okv["commit-time"  ][i]
             db.set r, "edits": edits
+
+gen_index process.argv...

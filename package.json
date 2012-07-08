@@ -1,0 +1,23 @@
+{
+  "author": "Karolin Varner",
+  "name": "PinkText",
+  "description": "Git Blogging System",
+  "version": "0.0.1",
+  "homepage": "https://github.com/koraa/PinkText/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/koraa/PinkText.git"
+  },
+  "scripts": {
+    "test": "jasmine --coffee"
+  },
+  "dependencies": {
+      "simplekv": ">=0.0.1",
+      "F":        ">=0.0.1"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
