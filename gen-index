@@ -1,0 +1,5 @@
+#!/usr/bin/env coffee
+
+gen = require './gen-index.coffee'
+
+gen.gen_index process.argv[1..]...

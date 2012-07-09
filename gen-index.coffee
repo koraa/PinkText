@@ -31,7 +31,7 @@ _    = require 'underscore'
 sys  = require 'child_process'
 skv  = require 'simplekv'
 
-gen_index = (dir, index = path.join dir, "_index") ->
+module.exports.gen_index = (dir, index = path.join dir, "_index") ->
     db = new db.PinkDB index
 
     db.delete()
@@ -45,10 +45,9 @@ gen_index = (dir, index = path.join dir, "_index") ->
 
         proc.stdOut.on 'eof', ->
             okv = skv.parse sbuf.join ''
-            edits = for i in [..okv["commit-author"].length]
+            edits = for i in [0..okv["commit-author"].length]
                 author:  okv["commit-author"][i]
                 time:    okv["commit-time"  ][i]
                 summary: okv["commit-time"  ][i]
             db.set r, "edits": edits
 
-gen_index process.argv...
