@@ -28,7 +28,7 @@ path = require 'path'
 util = require 'util'
 F    = require 'F'
 
-PinkDB
+class PinkDB
     constructor: (@f_loc) ->
         @f_ind     = path.join @f_loc, "index.json"
         @f_entries = path.join @f_loc, "entries/"
@@ -41,15 +41,20 @@ PinkDB
     flushIndex: ->
         si = F.dor @b_ind,
             F.PIPE ((d) -> [k,v] for k,v in d         ),
-                   ((l) -> l.sort, (a,b) -> a[1]-b[1] ),
+                   ((l) -> l.sort (a,b) -> a[1]-b[1] ),
                    ((m) -> e[0] for e in m            )
         
         fs.writeFileSync @f_ind, (util.format '%j', si)
 
     init: ->
-        fs.mkdirSync @f_loc
-        fs.mkdirSync @f_entries
+        fs.mkdirSync @f_loc unless fs.existsSync @f_loc
+        fs.mkdirSync @f_entries unless fs.existsSync @f_entries
 
     delete: (f) ->
-        fs.rmdirSync @loc, f
+        fs.rmdirSync @f_ind, f if fs.existsSync @f_ind
         @b_ind = {}
+
+##############################################
+# Expots
+
+module.exports.PinkDB = PinkDB

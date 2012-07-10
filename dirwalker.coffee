@@ -36,13 +36,13 @@ F    = require 'F'
 # Check if the file is a dir
 # 
 isDir = (o) ->
-    fs.statSync(o).stat.isDirectory()
+    fs.statSync(o).isDirectory() if fs.exists o
 
 #
 # Check if the file is a document
 # 
 isFile = (o) ->
-    fs.statSync(o).stat.isFile()
+    fs.statSync(o).isFile() if fs.exists o
 
 #
 # Check if the name matches the expression
@@ -52,13 +52,13 @@ nameMatch = (n, p) -> (path.basename n).match p
 #
 # Check if the path matches
 # 
-isFile = (f1, f2) -> (fs.reapathSync f1) == (fs.reapathSync f2)
+fileMatch= (f1, f2) -> (fs.realpathSync f1) == (fs.realpathSync f2)
 
 ###############################
 # Fun
 
 walk_dir = (dir, preq, f, rel='') ->
-    fs.readdir F.NOERR (files) ->
+    fs.readdir dir, F.NOERR (files, bar) ->
         for o in files
             p = (path.join dir, o)
             r = (path.join rel, o)
@@ -73,6 +73,7 @@ walk_dir = (dir, preq, f, rel='') ->
 exports.isDir = isDir
 exports.isFile = isFile
 exports.nameMatch = nameMatch
+exports.fileMatch = fileMatch
 exports.match     = nameMatch
 
 exports.walk_dir = walk_dir

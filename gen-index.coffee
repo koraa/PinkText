@@ -31,13 +31,15 @@ _    = require 'underscore'
 sys  = require 'child_process'
 skv  = require 'simplekv'
 
-module.exports.gen_index = (dir, index = path.join dir, "_index") ->
+gen_index = (dir, index = path.join dir, "_index") ->
+    console.log dir, index
+	
     db = new db.PinkDB index
 
     db.delete()
     db.init()
 
-    wkl.walk dir, (F.ALL wlk.isFile, (F.NOT F.ARG wlk.isFile, index)), (f, r) ->
+    wlk.walk dir, ((f) -> wlk.isFile(f) && !wlk.fileMatch index, f), (f, r) ->
         proc = sys.exec_file './git-info.sh'
 
         sbuf = []
@@ -51,3 +53,7 @@ module.exports.gen_index = (dir, index = path.join dir, "_index") ->
                 summary: okv["commit-time"  ][i]
             db.set r, "edits": edits
 
+###############################
+# Exports
+
+module.exports.gen_index = gen_index
