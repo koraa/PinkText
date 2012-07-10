@@ -24,7 +24,7 @@
 #
 
 db   = require './db'
-wlk  = require './dirwalker'
+fs2  = require './fs2'
 path = require 'path'
 F    = require 'F'
 _    = require 'underscore'
@@ -32,14 +32,13 @@ sys  = require 'child_process'
 skv  = require 'simplekv'
 
 gen_index = (dir, index = path.join dir, "_index") ->
-    console.log dir, index
-	
     db = new db.PinkDB index
 
     db.delete()
     db.init()
 
-    wlk.walk dir, ((f) -> wlk.isFile(f) && !wlk.fileMatch index, f), (f, r) ->
+    fs2.walk dir, ((f) -> fs2.isFile(f) && !fs2.fileMatch index, f), (f, r) ->
+        console.log f, r
         proc = sys.exec_file './git-info.sh'
 
         sbuf = []
@@ -52,6 +51,8 @@ gen_index = (dir, index = path.join dir, "_index") ->
                 time:    okv["commit-time"  ][i]
                 summary: okv["commit-time"  ][i]
             db.set r, "edits": edits
+
+    db.flushIndex()
 
 ###############################
 # Exports
