@@ -106,4 +106,8 @@ exports.match     = nameMatch
 
 exports.walk_dir = walk_dir
 exports.walk     = walk_dir
-exports.rm       = rm
+
+exports.rm         = rm
+exports.mkdir      = mkdir
+exports.providedir = providedir
+exports.cp         = cp
