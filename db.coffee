@@ -23,6 +23,8 @@
 # along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+fs2  = require './fs2'
+
 fs   = require 'fs'
 path = require 'path'
 util = require 'util'
@@ -35,15 +37,16 @@ class PinkDB
         @b_ind = {} # Using a map here to enshure that each k occures once only
 
     set: (k,v,f) ->
-        @b_ind[k] = v["edits"][0]["date"]
+        @b_ind[k] = v["edits"][0]["time"]
+        console.log "@b_ind[\"#{k}\"] = ", v["edits"][0]["time"]
         fs.writeFileSync (path.join @f_entries, k), (util.format '%j', v), f
 
     flushIndex: ->
         si = F.dor @b_ind,
-            F.PIPE ((d) -> [k,v] for k,v in d         ),
+            F.PIPE ((d) -> [k,v] for k,v of d         ),
                    ((l) -> l.sort (a,b) -> a[1]-b[1] ),
                    ((m) -> e[0] for e in m            )
-        
+
         fs.writeFileSync @f_ind, (util.format '%j', si)
 
     init: ->
@@ -51,7 +54,8 @@ class PinkDB
         fs.mkdirSync @f_entries unless fs.existsSync @f_entries
 
     delete: (f) ->
-        fs.rmdirSync @f_ind, f if fs.existsSync @f_ind
+        fs2.rm @f_ind, true
+        fs2.rm @f_entries, true
         @b_ind = {}
 
 ##############################################

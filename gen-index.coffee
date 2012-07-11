@@ -37,22 +37,20 @@ gen_index = (dir, index = path.join dir, "_index") ->
     db.delete()
     db.init()
 
+    stack = 0
     fs2.walk dir, ((f) -> fs2.isFile(f) && !fs2.fileMatch index, f), (f, r) ->
-        console.log f, r
-        proc = sys.exec_file './git-info.sh'
-
-        sbuf = []
-        proc.stdOut.on 'data', s -> sbuf.push s
-
-        proc.stdOut.on 'eof', ->
-            okv = skv.parse sbuf.join ''
+        stack++
+        proc = sys.exec './git-info.sh #{f}',F.NOERR (stdout) ->
+            okv = skv.parse stdout 
             edits = for i in [0..okv["commit-author"].length]
-                author:  okv["commit-author"][i]
-                time:    okv["commit-time"  ][i]
-                summary: okv["commit-time"  ][i]
+                author:  okv["commit-author" ][i]
+                time:    okv["commit-time"   ][i]
+                summary: okv["commit-message"][i]
             db.set r, "edits": edits
 
-    db.flushIndex()
+            stack--
+            if stack <= 0
+                db.flushIndex()
 
 ###############################
 # Exports
