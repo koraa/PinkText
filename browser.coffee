@@ -22,3 +22,19 @@
 # You should have received a copy of the Lesser GNU General Public License
 # along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
 #
+
+class PinkDB
+    constructor: (@f_loc) ->
+        @f_ind     = @f_loc + "/index.json"
+        @f_entries = @f_loc + "/entries/"
+        @f_data    = @f_loc + "/data/"
+
+    get: (k, f) ->
+         $.getJSON @f_entries + "/" + k, f
+   
+    data: (k, f) ->
+        $.load @f_data + "/" + k, f
+
+    index: (f) ->
+           $.getJSON @f_ind, f
+
