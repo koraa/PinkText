@@ -31,11 +31,13 @@ _    = require 'underscore'
 sys  = require 'child_process'
 skv  = require 'simplekv'
 
-gen_index = (dir, index = path.join dir, "_index") ->
+gen_index = (dir, index = (path.join dir, "_index"), data=(path.join index, "data")) ->
     db = new db.PinkDB index
 
     db.delete()
     db.init()
+
+    fs2.cp dir, data
 
     stack = 0
     fs2.walk dir, ((f) -> fs2.isFile(f) && !fs2.fileMatch index, f), (f, r) ->

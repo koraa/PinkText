@@ -58,7 +58,7 @@ class PinkDB
         fs2.rm @f_entries, true
         @b_ind = {}
 
-##############################################
+#############################################
 # Expots
 
 module.exports.PinkDB = PinkDB
