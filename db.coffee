@@ -38,7 +38,6 @@ class PinkDB
 
     set: (k,v,f) ->
         @b_ind[k] = v["edits"][0]["time"]
-        console.log "@b_ind[\"#{k}\"] = ", v["edits"][0]["time"]
         fs.writeFileSync (path.join @f_entries, k), (util.format '%j', v), f
 
     flushIndex: ->

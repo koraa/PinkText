@@ -37,10 +37,11 @@ gen_index = (dir, index = (path.join dir, "_index"), data=(path.join index, "dat
     db.delete()
     db.init()
 
+    fs2.rm data, true
     fs2.cp dir, data
-
+    
     stack = 0
-    fs2.walk dir, ((f) -> fs2.isFile(f) && !fs2.fileMatch index, f), (f, r) ->
+    fs2.walk dir, fs2.isFile, (f, r) ->
         stack++
         proc = sys.exec './git-info.sh #{f}',F.NOERR (stdout) ->
             okv = skv.parse stdout 

@@ -66,7 +66,7 @@ walk_dir = (dir, preq, f, rel='') ->
             walk_dir p, preq, f
 
 rm = F.Y ( me, f, indef=false) ->
-    return unless fs.existsSync f if indef
+    return if !(fs.existsSync f) && indef
 
     if isDir f
         for e in fs.readdirSync f
@@ -76,20 +76,23 @@ rm = F.Y ( me, f, indef=false) ->
         fs.unlinkSync f
 
 mkdir = F.Y (me, f, mode='0777') ->
+    return if fs.existsSync f
+    
     sdir = path.dirname f
     me sdir, mode unless fs.existsSync sdir
-    fs.mkdir f, mode
+    
+    fs.mkdirSync f, mode
 
 providedir = (f, mode='0777') ->
     mkdir path.dirname f
 
 cp = F.Y (me, f, dest, indef=false) ->
-    return unless fs.existsSync f if indef
-    
+    return if !(fs.existsSync f) && indef
+
     if isDir f
-        for e in fs.readdirSync f
-            me (path.join f, e)
         mkdir dest
+        for e in fs.readdirSync f
+            me (path.join f, e), (path.join dest, e), true
     else
         providedir dest
         fs.linkSync f, dest
