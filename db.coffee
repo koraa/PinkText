@@ -42,8 +42,7 @@ class PinkDB
         catch er
             @b_ind[k] = 0
 
-        f = path.join @f_entries, k
-
+        f = path.join @f_entries, k + ".json"
 
         fs2.providedir f
         fs.writeFileSync f, (util.format '%j', v)

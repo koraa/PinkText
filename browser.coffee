@@ -30,7 +30,7 @@ class PinkDB
         @f_data    = @f_loc + "/data/"
 
     get: (k, f) ->
-         $.getJSON @f_entries + "/" + k, f
+         $.getJSON @f_entries + "/" + k + ".json", f
    
     data: (k, f) ->
         $.load @f_data + "/" + k, f
