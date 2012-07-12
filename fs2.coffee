@@ -53,6 +53,12 @@ nameMatch = (n, p) -> (path.basename n).match p
 # 
 fileMatch= (f1, f2) -> (fs.realpathSync f1) == (fs.realpathSync f2)
 
+#
+# Checks if the given file is visible
+#
+isVisible = (f) -> not nameMatch f, /^\./
+
+
 ###############################
 # Fun 
 
@@ -61,9 +67,10 @@ walk_dir = (dir, preq, f, rel='') ->
         p = (path.join dir, o)
         r = (path.join rel, o)
 
-        f p, r if preq  o
-        if isDir o
-            walk_dir p, preq, f
+        if isVisible p
+            f p, r if preq p
+            if isDir p 
+                walk_dir p, preq, f, r
 
 rm = F.Y ( me, f, indef=false) ->
     return if !(fs.existsSync f) && indef
