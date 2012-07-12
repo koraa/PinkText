@@ -37,12 +37,16 @@ class PinkDB
         @b_ind = {} # Using a map here to enshure that each k occures once only
 
     set: (k,v,f) ->
-        @b_ind[k] = v["edits"][0]["time"]
+        try 
+            @b_ind[k] = v["edits"][0]["time"]
+        catch er
+            @b_ind[k] = 0
 
         f = path.join @f_entries, k
 
+
         fs2.providedir f
-        fs.writeFileSync f, (util.format '%j', v), f
+        fs.writeFileSync f, (util.format '%j', v)
 
     flushIndex: ->
         si = F.dor @b_ind,

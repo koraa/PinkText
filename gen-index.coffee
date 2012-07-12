@@ -25,13 +25,19 @@
 
 db   = require './db'
 fs2  = require './fs2'
+
+fs   = require 'fs'
 path = require 'path'
 F    = require 'F'
 _    = require 'underscore'
 sys  = require 'child_process'
 skv  = require 'simplekv'
 
-gen_index = (dir, index = (path.join dir, "_index"), data=(path.join index, "data")) ->
+gen_index = (dir,
+             index  = (path.join dir, "_index"),
+             data   = (path.join index, "data"),
+             source = (fs.realpathSync path.dirname __filename)) ->
+
     db = new db.PinkDB index
 
     db.delete()
@@ -43,12 +49,16 @@ gen_index = (dir, index = (path.join dir, "_index"), data=(path.join index, "dat
     stack = 0
     fs2.walk dir, fs2.isFile, (f, r) ->
         stack++
-        proc = sys.exec './git-info.sh #{f}',F.NOERR (stdout) ->
-            okv = skv.parse stdout 
-            edits = for i in [0..okv["commit-author"].length]
-                author:  okv["commit-author" ][i]
-                time:    okv["commit-time"   ][i]
-                summary: okv["commit-message"][i]
+
+
+        proc = sys.exec "cd #{dir}; #{source}/git-info.sh #{fs.realpathSync f}", F.NOERR (stdout) ->
+            okv = skv.parse stdout
+            edits = {}
+            try
+                edits = for i in [0..okv["commit-author"].length]
+                    author:  okv["commit-author" ][i]
+                    time:    okv["commit-time"   ][i]
+                    summary: okv["commit-message"][i]
             db.set r, "edits": edits
 
             stack--
