@@ -23,6 +23,12 @@
 # along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+###!
+Pinktext client-side library
+Copyright (c) 2012 by Karolin Varner
+Released under the Lesser Gnu General Public License Version 3 or higher
+###
+
 class PinkDB
     constructor: (@f_loc) ->
         @f_ind     = @f_loc + "/index.json"
