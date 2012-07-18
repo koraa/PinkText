@@ -29,6 +29,12 @@ Copyright (c) 2012 by Karolin Varner
 Released under the Lesser Gnu General Public License Version 3 or higher
 ###
 
+#
+# Encodes an URI component while preserving all /
+#
+encodeURIPath = (s) ->
+    (encodeURIComponent(n) for n in s.split '/').join '/'
+
 class PinkDB
     constructor: (@f_loc) ->
         @f_ind     = @f_loc + "/index.json"
@@ -36,10 +42,10 @@ class PinkDB
         @f_data    = @f_loc + "/data/"
 
     get: (k, f) ->
-         $.getJSON @f_entries + "/" + k + ".json", f
+         $.getJSON @f_entries + "/" + (encodeURIPath k) + ".json", f
    
     data: (k, f) ->
-        $.get @f_data + "/" + k, f
+        $.get @f_data + "/" + (encodeURIPath k), f
 
     index: (f) ->
         $.getJSON @f_ind, f
