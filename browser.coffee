@@ -39,8 +39,8 @@ class PinkDB
          $.getJSON @f_entries + "/" + k + ".json", f
    
     data: (k, f) ->
-        $.load @f_data + "/" + k, f
+        $.get @f_data + "/" + k, f
 
     index: (f) ->
-           $.getJSON @f_ind, f
+        $.getJSON @f_ind, f
 
